@@ -1,0 +1,4 @@
+*.pyc
+app/models/data/complete_data.csv
+app/models/data/student_course_mapping.csv
+app/models/data/students.data
