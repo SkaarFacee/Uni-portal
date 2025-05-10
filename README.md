@@ -14,7 +14,7 @@ This repository contains the code for the Uni-portal application. This README pr
     Open your terminal or command prompt and clone the repository using the following command:
 
     ```bash
-    git clone [https://github.com/SkaarFacee/Uni-portal.git](https://github.com/SkaarFacee/Uni-portal.git)
+    git clone https://github.com/SkaarFacee/Uni-portal.git](https://github.com/SkaarFacee/Uni-portal.git
     ```
 
 2.  **Navigate to the repository directory:**
