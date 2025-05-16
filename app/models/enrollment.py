@@ -123,3 +123,6 @@ class Enrollment:
     
     def get_random_subjects(self):
         return self.courses_df.sample(5)
+    
+    def get_students_by_subject(subject):
+        return [e['student'] for e in enrollments if e['subject'] == subject]

@@ -46,6 +46,15 @@ class Student(User):
         self.logged_in=False
         return True
         
+    def get_student_by_id(student_id):
+        return next((s for s in students if s['id'] == student_id), None)
+    
+    def get_students_by_name(name):
+        return [s for s in students if name.lower() in s['name'].lower()]
+    
+
+
+
 
     # def request support()
 
