@@ -31,7 +31,6 @@ def test_login_email_does_not_exist(mock_check_email_exist, student, capsys):
 @patch("app.models.user_student.Authentication.check_old_password_equals_new", return_value=False)
 def test_change_password_success(mock_check_old, mock_reset_password, mock_validate_password, student):
     student.change_password("NewPass123!")
-    # mock_reset_password.assert_called_once_with("test@example.com", "NewPass123!")
     assert student.password == "NewPass123!"
 
 

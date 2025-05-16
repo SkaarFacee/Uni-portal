@@ -23,10 +23,8 @@ TEST_USERS = pd.DataFrame([
 
 @pytest.fixture(scope="module", autouse=True)
 def setup_and_teardown():
-    # Setup: write test users to CSV
     TEST_USERS.to_csv(USER_CSV_FILE, index=False)
     yield
-    # Teardown: clean up files
     if os.path.exists(USER_CSV_FILE):
         os.remove(USER_CSV_FILE)
     if os.path.exists(USER_DATA_FILE):
@@ -35,8 +33,8 @@ def setup_and_teardown():
 
 def test_validate_password():
     assert Validate.validate_password("Abcde123") == True
-    assert Validate.validate_password("abcde123") == False  # no uppercase start
-    assert Validate.validate_password("Aabc1") == False      # not enough letters or digits
+    assert Validate.validate_password("abcde123") == False  
+    assert Validate.validate_password("Aabc1") == False      
 
 
 def test_validate_email():

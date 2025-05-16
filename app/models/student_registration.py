@@ -21,7 +21,7 @@ class RegistrationUtils:
     def convert_data_file_to_csv():
         with open(USER_DATA_FILE, 'r') as infile, open(USER_CSV_FILE, 'w', newline='') as outfile:
             writer = csv.writer(outfile)
-            writer.writerow(['StudentID', 'Email', 'Password', 'FirstName','LastName',"LastLoggedIn",'Number_of_logins'])  # Header
+            writer.writerow(['StudentID', 'Email', 'Password', 'FirstName','LastName',"LastLoggedIn",'Number_of_logins']) 
             for line in infile:
                 row = line.strip().split(',')
                 writer.writerow(row)
@@ -40,11 +40,10 @@ class Registration:
             self.file_created = False
         
         if not os.path.exists(STUDENT_COURSE):
-            os.makedirs(os.path.dirname(STUDENT_COURSE), exist_ok=True)  # Ensure directory exists
+            os.makedirs(os.path.dirname(STUDENT_COURSE), exist_ok=True)  
             with open(STUDENT_COURSE, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile)
-                writer.writerow(['StudentID','Subjects'])  # Write only headers
-     
+                writer.writerow(['StudentID','Subjects']) 
     
     def registeration_file_status(self):
         if self.file_created:

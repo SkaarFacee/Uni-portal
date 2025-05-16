@@ -85,9 +85,7 @@ class Admin(User):
                 passed.append(course_code)
             elif grade in fail_grades:
                 failed.append(course_code)
-            else:
-                # Optionally handle unexpected grades here
-                pass
+  
         return pd.Series([passed, failed])
 
     def categorize_pass_fail(self):

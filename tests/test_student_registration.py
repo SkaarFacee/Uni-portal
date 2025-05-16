@@ -28,14 +28,11 @@ def test_registration_file_status_created():
     assert registration.registeration_file_status().startswith("✅")
 
 def test_registration_file_status_exists():
-    # Create file before Registration is called
     registration = Registration()
     assert registration.registeration_file_status().startswith("ℹ️")
     os.remove(registration.file_path)
 
 def test_generate_student_id_initial(create_file):
-    # No entries, should return '000001'
-    # new_student=Registration().register_student("test@university.com","Pass123","Test","User")
     student_id = RegistrationUtils.generate_student_id()
     assert student_id == "000001"
 
