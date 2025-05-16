@@ -1,7 +1,7 @@
 import re 
 import pandas as pd 
 
-from app.constants import USER_CSV_FILE,USER_DATA_FILE,STUDENT_ID_COL_NAME
+from app.constants import USER_CSV_FILE,USER_DATA_FILE,STUDENT_ID_COL_NAME,ADM_CSV_FILE,ADM_ID_COL_NAME
 
 class Validate:
     @staticmethod
@@ -18,11 +18,21 @@ class Validate:
             return False
 
     @staticmethod
-    def check_email_exist(email):
-        if email in pd.read_csv(USER_CSV_FILE)['Email'].to_list():
-            return True
-        else: 
-            return False
+    def check_email_exist(email,usertype=2):
+        if usertype == 1:
+            if email in pd.read_csv(ADM_CSV_FILE)['Email'].to_list():
+                return True
+            else: 
+                return False
+        elif usertype == 2:
+            if email in pd.read_csv(USER_CSV_FILE)['Email'].to_list():
+                return True
+            else: 
+                return 
+            
+
+
+        
     @staticmethod    
     def get_user_profile(email):
         df=pd.read_csv(USER_CSV_FILE,dtype={STUDENT_ID_COL_NAME: str})
@@ -31,12 +41,18 @@ class Validate:
         else :
             return False 
 
-class Authentication:
-    def __init__(self):
+class Authentication():
+    def __init__(self,user_type=2):
         self.login_attempts=0
+        self.user_type = user_type
         
     def load_users_df(self):
-        self.users_df=pd.read_csv(USER_CSV_FILE,dtype={STUDENT_ID_COL_NAME: str})
+        if self.user_type == 1:
+            #print('File reading for admin')
+            self.users_df=pd.read_csv(ADM_CSV_FILE,dtype={ADM_ID_COL_NAME: str})
+        elif self.user_type == 2:
+            #print('File reading for student')
+            self.users_df=pd.read_csv(USER_CSV_FILE,dtype={STUDENT_ID_COL_NAME: str})
         
     def validate_credentials(self, email, password):
         self.load_users_df()
@@ -73,9 +89,16 @@ class Authentication:
         else:
             print('There is no email')
 
-    def get_student_id(self,email):
+    def get_student_id(self,email,usertype):
         self.load_users_df()
-        if Validate.check_email_exist(email):
+        if Validate.check_email_exist(email,usertype):
             return self.users_df[self.users_df['Email']==email]['StudentID'].unique()[0]
+        else:
+            print('There is no email')
+
+    def get_admin_id(self,email,usertype):
+        self.load_users_df()
+        if Validate.check_email_exist(email,usertype):
+            return self.users_df[self.users_df['Email']==email]['AdminID'].unique()[0]
         else:
             print('There is no email')

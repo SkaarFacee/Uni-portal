@@ -1,7 +1,9 @@
 USER_DATA_FILE='app/models/data/students.data'
 USER_CSV_FILE='app/models/data/complete_data.csv'
+ADM_CSV_FILE='app/models/data/admin_data.csv'
 COURSES_FILE='app/models/data/courses.csv'
 STUDENT_COURSE='app/models/data/student_course_mapping.csv'
+ADM_ID_COL_NAME = 'AdminID'
 STUDENT_ID_COL_NAME='StudentID'
 SUBJECT_COL_NAME='Subjects'
 SUBJECT_ID_COL='Subject_ID'
@@ -13,6 +15,22 @@ GRADING_SCHEME = [
     (50, 'P'),   
     (0,  'Z')    
 ]
+
+
+
+class ADMIN_MENU:
+    LOGIN="Login"
+    CANCEL="Cancel"
+
+class ADMIN_OPERATION:
+    SEARCH_ID = "Search_ID"
+    SEARCH_Name = "Search_Name"
+    EXPORT_REPORT = "Report"
+    FILTER = "Filter"
+    SEND_EMAIL = "Email"
+    SHOW_LOGIN_STATS = "Show"
+    LOGOUT="Logout"
+
 class MENU:
     LOGIN="Login"
     REGISTER="Register"
@@ -38,3 +56,4 @@ class LANDING_MSGS:
     VIEW_ENROLL='view_enrol'
     SUBJECT_INFO='subject_info'
     BACK='back'
+

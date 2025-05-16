@@ -177,6 +177,99 @@ class LandingView():
         rprint(centered_panel)
 
     @staticmethod
+    def display_student_data(student_row):
+        content = f"""
+        [bold cyan]Student ID     :[/bold cyan] {student_row['StudentID']}
+        [bold cyan]Email          :[/bold cyan] {student_row['Email']}
+        [bold cyan]Password       :[/bold cyan] {student_row['Password']}
+        [bold cyan]First Name     :[/bold cyan] {student_row['FirstName']}
+        [bold cyan]Last Name      :[/bold cyan] {student_row['LastName']}
+        """.strip()
+        panel = Panel.fit(
+            content,
+            border_style="cyan",
+            padding=(1, 4),
+        )
+
+        centered_panel = Align.center(panel)
+
+        rprint(centered_panel)
+
+
+
+    @staticmethod
+    def display_student_filtered_data(student_rows):
+        """
+        Display a list of students with their Student ID and Name in a styled panel.
+        Args:
+            student_rows (list): List of tuples, each containing (StudentID, Name).
+        """
+        if not student_rows:
+            rprint("[bold red]No students to display.[/bold red]")
+            return
+
+        # Build content for all students
+        content_lines = []
+        for student_id, name in student_rows:
+            content_lines.append(f"[bold cyan]Student ID :[/bold cyan] {student_id}")
+            content_lines.append(f"[bold cyan]Name       :[/bold cyan] {name}")
+            content_lines.append("")  # Separator between students
+
+        # Join lines, removing the last empty line
+        content = "\n".join(content_lines).strip()
+
+        # Create a styled panel
+        panel = Panel.fit(
+            content,
+            border_style="cyan",
+            padding=(1, 4),
+        )
+
+        # Center the panel
+        centered_panel = Align.center(panel)
+
+        # Display the panel
+        rprint(centered_panel)
+
+    @staticmethod
+    def display_student_loginfo_data(student_data):
+        """
+        Display a student's Number of Logins and Last Logged In time in a styled panel.
+        Args:
+            student_data (dict): Dictionary containing 'Number_of_Logins' and 'LastLoggedIn'.
+        """
+        if not student_data or not isinstance(student_data, dict):
+            rprint("[bold red]No student login data to display.[/bold red]")
+            return
+
+        # Check for required keys
+        if 'Number_of_Logins' not in student_data or 'LastLoggedIn' not in student_data:
+            rprint("[bold red]Invalid student login data: missing required fields.[/bold red]")
+            return
+
+        # Build content
+        content_lines = [
+            f"[bold cyan]Number of Logins :[/bold cyan] {student_data['Number_of_Logins']}",
+            f"[bold cyan]Last Logged In   :[/bold cyan] {student_data['LastLoggedIn'] or 'Never'}"
+        ]
+
+        # Join lines
+        content = "\n".join(content_lines).strip()
+
+        # Create a styled panel
+        panel = Panel.fit(
+            content,
+            border_style="cyan",
+            padding=(1, 4),
+        )
+
+        # Center the panel
+        centered_panel = Align.center(panel)
+
+        # Display the panel
+        rprint(centered_panel)
+
+    @staticmethod
     def get_subject_from_df(df):
         subject_id=[]
         rprint()

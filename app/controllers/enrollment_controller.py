@@ -1,4 +1,6 @@
 from rich import print as rprint
+import csv
+from datetime import datetime
 
 from app.models.enrollment import Enrollment
 from app.models.subject import Subject
@@ -6,12 +8,42 @@ from app.models.subject import Subject
 from app.views.cli_landing_view import LandingView
 
 from app.constants import LANDING_MSGS
+from app.constants import USER_CSV_FILE
 
 class EnrollmentController:
+    
     def __init__(self,student_user):
         self.enrollment=Enrollment(student_user)
 
-    
+    def update_login_info(self, student_id):
+        updated_rows = []
+        login_updated = False
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        with open(USER_CSV_FILE, mode='r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            fieldnames = reader.fieldnames
+            for row in reader:
+                if row['StudentID'] == student_id:
+                    row['LastLoggedIn'] = current_time
+                    try:
+                        row['Number_of_logins'] = str(int(row['Number_of_logins']) + 1)
+                    except:
+                        row['Number_of_logins'] = '1'
+                    login_updated = True
+                updated_rows.append(row)
+
+        if not login_updated:
+            print(f"StudentID {student_id} not found.")
+            return
+
+        with open(USER_CSV_FILE, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(updated_rows)
+
+        print(f"Login info updated for StudentID {student_id}.")
+
     def menu_choice(self):
         return LandingView.ask_student_view()
 
