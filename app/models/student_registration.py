@@ -1,6 +1,6 @@
 import os 
 import csv 
-
+from datetime import datetime
 from app.constants import USER_DATA_FILE,USER_CSV_FILE,STUDENT_COURSE
 class RegistrationUtils:
     @staticmethod
@@ -21,7 +21,7 @@ class RegistrationUtils:
     def convert_data_file_to_csv():
         with open(USER_DATA_FILE, 'r') as infile, open(USER_CSV_FILE, 'w', newline='') as outfile:
             writer = csv.writer(outfile)
-            writer.writerow(['StudentID', 'Email', 'Password', 'FirstName','LastName'])  # Header
+            writer.writerow(['StudentID', 'Email', 'Password', 'FirstName','LastName',"LastLoggedIn",'Number_of_logins'])  # Header
             for line in infile:
                 row = line.strip().split(',')
                 writer.writerow(row)
@@ -58,9 +58,11 @@ class Registration:
         self.first_name=first_name
         self.last_name=last_name
         self.student_id=RegistrationUtils.generate_student_id()
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         try:
             with open(USER_DATA_FILE, 'a') as file:
-                file.write(f"{self.student_id},{self.email},{self.password},{self.first_name},{self.last_name}\n")
+                file.write(f"{self.student_id},{self.email},{self.password},{self.first_name},{self.last_name},{current_time},1\n")
                 file.close()
             RegistrationUtils.convert_data_file_to_csv()    
             return True

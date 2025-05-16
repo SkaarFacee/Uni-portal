@@ -64,7 +64,6 @@ class EnrollmentController:
                                 while LandingView.confirm():        
                                     random_df=self.enrollment.get_random_subjects()
                                     subject_choice=LandingView.get_subject_from_df(random_df)
-                                    print(f'This is the choice {subject_choice}')
                                     self.enrollment.enroll_subject(subject_choice)
                                     
                             else:

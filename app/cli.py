@@ -33,7 +33,6 @@ def registration_app():
         valid_message = RegisterController.register_student(rego_obj, registration_data)
         if valid_message==True:
             RegisterView.register_success()
-            login_info=LoginView.ask_username_password()
             break
         else:
             RegistrationLoopController().registration_error_printer(valid_message)
@@ -88,12 +87,10 @@ if __name__ == "__main__":
                                 case ADMIN_OPERATION.SEARCH_ID:
                                     ids = input('Enter student id: ')
                                     data = search_student_name(id=ids)
-                                    print(data)
                                     LandingView.display_student_data(data)
                                 case ADMIN_OPERATION.SEARCH_Name:
                                     name = input('Enter student name: ')
                                     data = search_student_name(name=name)
-                                    print(data)
                                     LandingView.display_student_data(data)
                                 case ADMIN_OPERATION.EXPORT_REPORT:
                                     print('You export report option')
@@ -119,18 +116,3 @@ if __name__ == "__main__":
                     break;
         print('GOING BACK TO MENU LOADING SCREEN')
                 
-
-
-
-
-
-# email='Aditya8anil@university.com'
-# password='HelloWorld12345'
-# first_name='Aditya'
-# last_name="Anil"
-# if all((Validate.validate_email(email),Validate.validate_password(password),not Validate.check_email_exist(email))):
-#     print('User registered')
-#     rego_obj.register_student(email,password,first_name,last_name)
-# else: 
-#     print('User not created')
-

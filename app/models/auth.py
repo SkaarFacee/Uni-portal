@@ -28,7 +28,7 @@ class Validate:
             if email in pd.read_csv(USER_CSV_FILE)['Email'].to_list():
                 return True
             else: 
-                return 
+                return False
             
 
 
