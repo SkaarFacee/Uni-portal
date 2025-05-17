@@ -23,12 +23,19 @@ class ADMIN_MENU:
     CANCEL="Cancel"
 
 class ADMIN_OPERATION:
+    VIEW_ALL_STUDENTS="view_all_students"
+    CATEGORIZE_STUDENTS_BY_GRADE="categorize_students_by_grade"
+    CATEGORIZE_STUDENTS_BY_PASS_FAIL="categorize_students_by_pass_fail"
+    DELETE_ID="delete_student_by_id"
+    DELETE_ALL="delete_all_students"
     SEARCH_ID = "Search_ID"
     SEARCH_Name = "Search_Name"
-    EXPORT_REPORT = "Report"
+    EXPORT_ALL_REPORT_CSV = "Report"
     FILTER = "Filter"
     SEND_EMAIL = "Email"
     SHOW_LOGIN_STATS = "Show"
+    CREATE_BACKUP="create_backup"
+    LOAD_BACKUP="load_backup"
     LOGOUT="Logout"
 
 class MENU:

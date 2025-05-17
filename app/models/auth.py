@@ -30,9 +30,6 @@ class Validate:
             else: 
                 return False
             
-
-
-        
     @staticmethod    
     def get_user_profile(email):
         df=pd.read_csv(USER_CSV_FILE,dtype={STUDENT_ID_COL_NAME: str})
@@ -87,18 +84,18 @@ class Authentication():
             else :
                 return False
         else:
-            print('There is no email')
+            return False
 
     def get_student_id(self,email,usertype):
         self.load_users_df()
         if Validate.check_email_exist(email,usertype):
             return self.users_df[self.users_df['Email']==email]['StudentID'].unique()[0]
         else:
-            print('There is no email')
+            return False
 
     def get_admin_id(self,email,usertype):
         self.load_users_df()
         if Validate.check_email_exist(email,usertype):
             return self.users_df[self.users_df['Email']==email]['AdminID'].unique()[0]
         else:
-            print('There is no email')
+            return False

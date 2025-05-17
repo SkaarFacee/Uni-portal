@@ -1,6 +1,6 @@
 from app.models.student_registration import Registration
 from app.models.auth import Validate
-from app.views.cli_first_view import register_info,first_user_easter_egg
+from app.views.cli_first_view import MAIN_UTILS
 from app.constants import ERRORS
 from app.views.cli_register_view import RegisterView
 class RegisterController:
@@ -8,7 +8,7 @@ class RegisterController:
     def pre_registration():
         rego_obj=Registration()
         if rego_obj.file_created:
-            first_user_easter_egg() 
+            MAIN_UTILS.first_user_easter_egg() 
         return rego_obj
     @staticmethod
     def register_student(rego_obj,input_info):

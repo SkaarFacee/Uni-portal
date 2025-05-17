@@ -3,40 +3,6 @@ from app.models.user import User
 from app.constants import MGS
 from rich import print as rprint
 
-class Admin(User):
-    def __init__(self, email, password):
-        super().__init__(email, password)
-        self.auth_obj = Authentication(user_type=1)
-        self.logged_in = False
-
-    def check_if_logged_in(self):
-        return True if self.logged_in else False
-
-    def login(self, password=None):
-        usertype = 1
-        self.auth_obj.login_attempts += 1
-
-        if Validate.check_email_exist(self.email,usertype):
-            if password is not None:
-                self.password = password
-            if self.auth_obj.login_attempts <= 3:
-                if self.auth_obj.validate_credentials(self.email, self.password):
-                    self.admin_id = self.auth_obj.get_admin_id(self.email,usertype)
-                    self.logged_in = True
-                    return True
-                else:
-                    rprint(f"[yellow]🔁 Try Again:[/yellow] ([bold red]{self.auth_obj.login_attempts}[/bold red]/5) attempts used")
-                    return MGS.TRY_PASSWORD_AGAIN
-            if self.auth_obj.login_attempts > 3:
-                return False
-        else:
-            return None
-
-    def logout(self):
-        self.logged_in = False
-        return True
-
-
 class Student(User):
     def __init__(self, email, password):
         super().__init__(email, password)
@@ -77,14 +43,4 @@ class Student(User):
     def logout(self):
         self.logged_in=False
         return True
-        
-
-    # def request support()
-
-    # filter_subjects()
-
-    # export()
-
-    # def Count_enrolled
-
-            
+    

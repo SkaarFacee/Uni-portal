@@ -46,8 +46,7 @@ class EnrollmentController:
 
     def menu_choice(self):
         return LandingView.ask_student_view()
-
-            
+        
     def enroll_menu(self):
         LandingView.enrollment_landing()
         if self.enrollment.check_enrollment_completion():
@@ -96,7 +95,6 @@ class EnrollmentController:
                         rprint('[red]You have not enrolled in anything')
                 case LANDING_MSGS.BACK:
                     break
-
 
     def profile_menu(self):
         LandingView.display_profile(self.enrollment.get_student_profile())
