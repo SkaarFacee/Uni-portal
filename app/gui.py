@@ -10,7 +10,6 @@ from app.gui_app.login_window import LoginWindow
 from app.models.auth import Validate
 from app.constants import USER_CSV_FILE
 os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-print(os.getcwd)
 
 class GUIUniApp(tk.Tk):
     def __init__(self):
