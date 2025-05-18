@@ -46,32 +46,73 @@ class EnrollmentUtils:
 
 
 class Enrollment:
-    def __init__(self,student_obj : Student):
-        self.student=student_obj
-        self.courses_df=EnrollmentUtils.prepare_courses_df()
-        self.student_course_df=EnrollmentUtils.prepare_student_course_df()
+    def __init__(self, student_obj : Student):
+        self.student = student_obj
+        self.courses_df = EnrollmentUtils.prepare_courses_df()
+        self.student_course_df = EnrollmentUtils.prepare_student_course_df()
+        
+        # Fix for missing student_id attribute
+        if not hasattr(self.student, 'student_id') or self.student.student_id is None:
+            try:
+                # Get student_id directly from CSV
+                import pandas as pd
+                from app.constants import USER_CSV_FILE, STUDENT_ID_COL_NAME
+                
+                # Read the user data
+                users_df = pd.read_csv(USER_CSV_FILE, dtype={STUDENT_ID_COL_NAME: str})
+                user_row = users_df[users_df['Email'] == self.student.email]
+                
+                if not user_row.empty:
+                    self.student.student_id = user_row[STUDENT_ID_COL_NAME].values[0]
+                    # print(f"Retrieved student_id: {self.student.student_id} for email: {self.student.email}")
+                    
+                    # Initialize enrolled_subjects if it doesn't exist
+                    if not hasattr(self.student, 'enrolled_subjects'):
+                        self.student.enrolled_subjects = {}
+                else:
+                    raise AttributeError(f"Could not find student with email {self.student.email} in the database")
+            except Exception as e:
+                print(f"Error retrieving student_id: {e}")
+                raise
+        
         self.add_student_if_not_enrolled()
 
     def check_enrollment_completion(self):
         return True if len(self.student.enrolled_subjects)==4 else False
 
     def add_student_if_not_enrolled(self):
-        if self.student_course_df.empty or self.student.student_id not in self.student_course_df[STUDENT_ID_COL_NAME].values:
-            self.student.enrolled_subjects={}
-            new_row = {
-                STUDENT_ID_COL_NAME: self.student.student_id,
-                'Subjects': self.student.enrolled_subjects
-            }
+        try:
+            # Make sure student_id is a string for comparison
+            student_id_str = str(self.student.student_id)
+            
+            if self.student_course_df.empty or student_id_str not in self.student_course_df[STUDENT_ID_COL_NAME].astype(str).values:
+                self.student.enrolled_subjects = {}
+                new_row = {
+                    STUDENT_ID_COL_NAME: student_id_str,
+                    'Subjects': self.student.enrolled_subjects
+                }
 
-            self.student_course_df = pd.concat(
-                [self.student_course_df, pd.DataFrame([new_row])],
-                ignore_index=True
-            )
-            EnrollmentUtils.update_student_course_df(self.student_course_df)
+                self.student_course_df = pd.concat(
+                    [self.student_course_df, pd.DataFrame([new_row])],
+                    ignore_index=True
+                )
+                EnrollmentUtils.update_student_course_df(self.student_course_df)
 
-        elif self.student.student_id in self.student_course_df[STUDENT_ID_COL_NAME].values: 
-            self.student.enrolled_subjects = ast.literal_eval(
-                self.student_course_df[self.student_course_df[STUDENT_ID_COL_NAME] == self.student.student_id][SUBJECT_COL_NAME].to_list()[0])
+            elif student_id_str in self.student_course_df[STUDENT_ID_COL_NAME].astype(str).values: 
+                row = self.student_course_df[self.student_course_df[STUDENT_ID_COL_NAME].astype(str) == student_id_str]
+                if not row.empty:
+                    subject_str = row[SUBJECT_COL_NAME].iloc[0]
+                    if pd.isna(subject_str) or subject_str == '{}':
+                        self.student.enrolled_subjects = {}
+                    else:
+                        try:
+                            self.student.enrolled_subjects = ast.literal_eval(subject_str)
+                        except (ValueError, SyntaxError):
+                            self.student.enrolled_subjects = {}
+            return None
+        except Exception as e:
+            print(f"Error in add_student_if_not_enrolled: {e}")
+            self.student.enrolled_subjects = {}
         return None
     
     def update_student_course(self):
@@ -109,14 +150,19 @@ class Enrollment:
         return False 
     
     def enroll_subject(self,subject_id):
-
         if self.get_number_of_enrollments()>=5:
             return None
-        if EnrollmentUtils.check_if_subject_id_valid(subject_id,self.courses_df):
-            self.student.enrolled_subjects.update(EnrollmentUtils.map_sub_to_mark(subject_id))
+        
+        if isinstance(subject_id, str) and EnrollmentUtils.check_if_subject_id_valid(subject_id, self.courses_df):
+            mark = EnrollmentUtils.get_random_mark()
+            grade = Subject.mark_to_grade(mark)
+            self.student.enrolled_subjects[subject_id] = [mark, grade]
+            
             self.update_student_course()
-            return True 
-        return False 
+            return True
+        else:
+            return False
+        
     
     def get_student_profile(self):
         return Validate.get_user_profile(self.student.email)

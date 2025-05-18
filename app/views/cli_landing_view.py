@@ -66,7 +66,7 @@ class LandingView():
             choices=[
                 questionary.Choice("View Enrollments", value=LANDING_MSGS.VIEW_ENROLL),
                 questionary.Choice("Add Enrollment", value=LANDING_MSGS.ADD_ENROLL),
-                questionary.Choice("Subject details", value=LANDING_MSGS.SUBJECT_INFO),
+                questionary.Choice("Unenrollment and Subject details", value=LANDING_MSGS.SUBJECT_INFO),
                 questionary.Choice("Go Back", value=LANDING_MSGS.BACK)
             ],
             style=questionary.Style(
@@ -307,9 +307,8 @@ class LandingView():
                 ]
             ),
         ).ask()
-        subject_id.append(selected)
 
-        return subject_id
+        return selected
 
     @staticmethod
     def confirm():

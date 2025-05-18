@@ -28,6 +28,8 @@ from app.controllers.login_controller_admin import AdminLoginController
 from app.controllers.enrollment_controller import EnrollmentController
 from app.models.auth import Authentication
 
+
+
 def registration_app():
     while True:
         registration_data = MAIN_UTILS.register_info()

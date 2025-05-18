@@ -12,7 +12,7 @@ from app.constants import USER_CSV_FILE
 
 class EnrollmentController:
     
-    def __init__(self,student_user):
+    def __init__(self,student_user:Enrollment):
         self.enrollment=Enrollment(student_user)
 
     def update_login_info(self, student_id):
