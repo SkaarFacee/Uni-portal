@@ -1,9 +1,6 @@
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-import dotenv
-import pyperclip
-import questionary
 from rich import print as rprint
 from rich.console import Console
 # from app.models.auth import Authentication
