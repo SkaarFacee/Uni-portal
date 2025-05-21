@@ -40,7 +40,30 @@ class EnrollmentWindow(tk.Frame):
             fg="white"
         )
         header_label.pack(pady=30)
-        
+
+
+        # Add error message label
+        self.error_label = tk.Label(
+            self,
+            text="",
+            font=("Arial", 14, "bold"),
+            bg="#3498db",
+            fg="red",
+            wraplength=600  # Adjust based on window width
+        )
+        self.error_label.pack(pady=(0, 10))
+
+        # And add this success message label:
+        self.success_label = tk.Label(
+            self,
+            text="",
+            font=("Arial", 14, "bold"),
+            bg="#3498db",
+            fg="yellow",
+            wraplength=600
+        )
+        self.success_label.pack(pady=(0, 5))
+                
         # Navigation Menu
         nav_frame = tk.Frame(self, bg="#3498db", height=50)
         nav_frame.pack(fill=tk.X)
@@ -269,17 +292,14 @@ class EnrollmentWindow(tk.Frame):
     def enroll_selected(self):
         """Enroll in selected subject"""
         # Check if maximum enrollments reached
-        if self.enrollment_controller.enrollment.get_number_of_enrollments() >= 4:
-            messagebox.showerror(
-                "Enrollment Error", 
-                "You have already enrolled in the maximum number of subjects (4)."
-            )
+        if self.enrollment_controller.enrollment.get_number_of_enrollments() >= 4: 
+            self.error_label.config(text="Enrollment Error : You have already enrolled in the maximum number of subjects (4).")
             return
             
         # Get selected subject
         selected_item = self.subjects_tree.selection()
         if not selected_item:
-            messagebox.showwarning("Selection Required", "Please select a subject to enroll in.")
+            self.error_label.config(text="Selection Required : Please select a subject to enroll in.")
             return
             
         subject_id = self.subjects_tree.item(selected_item[0], "values")[0]
@@ -287,81 +307,65 @@ class EnrollmentWindow(tk.Frame):
         result = self.enrollment_controller.enrollment.enroll_subject(subject_id)
         
         if result:
-            messagebox.showinfo("Enrollment Successful", f"Successfully enrolled in subject {subject_id}.")
+            self.success_label.config(text=f"Enrollment Successful : Successfully enrolled in subject {subject_id}.")
             # Refresh views
             self.load_enrollments()
             self.load_available_subjects()
         else:
-            messagebox.showerror("Enrollment Failed", "Failed to enroll in the subject.")
+            self.error_label.config(text="Enrollment Failed : Failed to enroll in the subject.")
     
     def random_enrollment(self):
         """Enroll in random subjects"""
         # Check if maximum enrollments reached
         if self.enrollment_controller.enrollment.get_number_of_enrollments() >= 4:
-            messagebox.showerror(
-                "Enrollment Error", 
-                "You have already enrolled in the maximum number of subjects (4)."
-            )
+            self.error_label.config(text="Enrollment Error : You have already enrolled in the maximum number of subjects (4).")
             return
         
         # Confirm random enrollment
-        confirm = messagebox.askyesno(
-            "Random Enrollment", 
-            "Do you want to randomly enroll in subjects up to the maximum of 4?"
-        )
-        
-        if confirm:
-            result = self.enrollment_controller.enrollment.add_random_enroll()
-            if result:
-                messagebox.showinfo(
-                    "Random Enrollment Successful", 
-                    "Successfully enrolled in random subjects."
-                )
-                # Refresh views
-                self.load_enrollments()
-                self.load_available_subjects()
-            else:
-                messagebox.showerror(
-                    "Enrollment Failed", 
-                    "Failed to enroll in random subjects. You may have reached the maximum of 4 subjects."
-                )
-    
+        # Use direct confirmation instead of messagebox
+        result = self.enrollment_controller.enrollment.add_random_enroll()
+        if result:
+            self.success_label.config(text="Enrollment Successful : Successfully enrolled in random subjects.")
+            # Refresh views
+            self.load_enrollments()
+            self.load_available_subjects()
+        else:
+            self.error_label.config(text="Enrollment Failed : Failed to enroll in random subjects. You may have reached the maximum of 4 subjects.")
+
     def unenroll_selected(self):
         """Unenroll from selected subject"""
         # Get selected subject
         selected_item = self.enrollment_tree.selection()
         if not selected_item:
-            messagebox.showwarning("Selection Required", "Please select a subject to unenroll from.")
+            self.error_label.config(text="Selection Required : Please select a subject to unenroll from.")
             return
             
         subject_id = self.enrollment_tree.item(selected_item[0], "values")[0]
-        
-        # Confirm action
-        confirm = messagebox.askyesno(
-            "Confirm Unenrollment", 
-            f"Are you sure you want to unenroll from subject {subject_id}?"
-        )
-        
-        if not confirm:
-            return
             
-        # Unenroll from subject
+
+        # Unenroll from subject (no confirmation dialog)
         result = self.enrollment_controller.enrollment.unenroll_subject(subject_id)
         
         if result:
-            messagebox.showinfo("Unenrollment Successful", f"Successfully unenrolled from subject {subject_id}.")
+            self.success_label.config(text=f"Unenrollment Successful : Successfully unenrolled from subject {subject_id}.")
             # Refresh views
             self.load_enrollments()
             self.load_available_subjects()
         else:
-            messagebox.showerror("Unenrollment Failed", "Failed to unenroll from the subject.")
-    
+            self.error_label.config(text="Unenrollemnt Failed : Failed to unenroll from the subject.") 
+
+
     def view_selected_details(self):
         """View details of selected subject"""
+
+        # Clear previous messages
+        self.error_label.config(text="")
+        self.success_label.config(text="")
+
         # Get selected subject
         selected_item = self.enrollment_tree.selection()
         if not selected_item:
-            messagebox.showwarning("Selection Required", "Please select a subject to view details.")
+            self.error_label.config(text="Selection Required : Please select a subject to view details.")
             return
             
         subject_id = self.enrollment_tree.item(selected_item[0], "values")[0]
@@ -375,7 +379,7 @@ class EnrollmentWindow(tk.Frame):
             # Open details window
             SubjectDetailsWindow(self,subject)
         else:
-            messagebox.showerror("Error", "Could not retrieve subject details.")
+            self.error_label.config(text="Error : Could not retrieve subject details.")
     
     def view_subject_details(self, event):
         """Handle double-click on enrollment treeview"""

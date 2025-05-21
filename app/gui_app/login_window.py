@@ -43,6 +43,17 @@ class LoginWindow(tk.Frame):
             bg="#3498db"
         )
         login_label.pack(pady=(0, 20))
+
+        # Add error message label - This was missing in your original code
+        self.error_label = tk.Label(
+            form_frame,
+            text="",
+            font=("Arial", 14, "bold"),
+            bg="#3498db",
+            fg="red",
+            wraplength=400
+        )
+        self.error_label.pack(pady=(0, 10))
         
         # Email field
         email_frame = tk.Frame(form_frame, bg="#3498db")
@@ -147,34 +158,30 @@ class LoginWindow(tk.Frame):
         
         # Check for empty fields
         if not email or not password:
-            messagebox.showerror("Login Error", "Email and password cannot be empty!")
+            self.error_label.config(text="Email or password cannot be empty.")
             return
-        
+
         # Validate email format
         if not Validate.validate_email(email):
-            messagebox.showerror(
-                "Invalid Email", 
-                "Email format is invalid! Please use username@university.com format."
-            )
+            self.error_label.config(text="Invalid Email")
+            self.error_label.config(text= "Email format is invalid! Please use username@university.com format.")
             return
         
         # Check if email exists
         if not Validate.check_email_exist(email):
-            messagebox.showerror(
-                "Login Failed", 
-                "Email not found! Please register first."
-            )
+            self.error_label.config(text= "Login Failed")
+            self.error_label.config(text= "Email not found! Please register first.")
             return
         
         # Attempt to login
         student = Student(email, password)
-        auth_result = True #student.login()
+        auth_result = student.login()
         
         if auth_result is True:
             messagebox.showinfo("Login Successful", f"Welcome, {email}!")
             self.open_enrollment_window(student)
         else:
-            messagebox.showerror("Login Failed", "Invalid credentials. Please try again.")
+            self.error_label.config(text= "Login Failed : Invalid credentials. Please try again.")
     
     def open_enrollment_window(self, student):
         """Open enrollment window after successful login"""
