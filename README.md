@@ -68,6 +68,9 @@ Follow these steps to set up the application:
     conda activate uni-portal-env
     ```
 2.  **Run the CLI application**
+    The admin credentials are : 
+    > email : admin@admin.com,
+    > password: Password
     ```bash
     python cli.py
     ```

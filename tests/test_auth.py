@@ -51,5 +51,6 @@ def test_check_email_exist():
 def test_validate_credentials():
     auth = Authentication()
     assert auth.validate_credentials("john@university.com", "Abcde123") == True
+    assert auth.validate_credentials("johnDoe@university.com", "Abcde123") == True
     assert auth.validate_credentials("jane@university.com", "wrongpass") == False
     assert auth.validate_credentials("nonexistent@university.com", "pass") == False
