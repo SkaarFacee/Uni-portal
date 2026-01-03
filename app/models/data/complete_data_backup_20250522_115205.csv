@@ -1,0 +1,5 @@
+StudentID,Email,Password,FirstName,LastName,LastLoggedIn,Number_of_logins
+000002,adi@university.com,ADITYA12345,JOHN,DOE ,2025-05-21 15:25:10,1
+000003,spam@university.com,QWERTY12345,Hello world,No more,2025-05-21 15:25:40,1
+000004,123@university.com,PASSWORD12345,John,sick,2025-05-22 11:41:23,1
+000005,aditya123@university.com,ADITYA12345,Aditya,qwer,2025-05-22 11:43:13,2
